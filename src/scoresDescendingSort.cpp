@@ -20,6 +20,37 @@ struct student {
 	int score;
 };
 
+
+int qfindPivot(struct student a[], int l, int r)
+{
+	int x = a[r].score, i = l, j;
+	for (j = l; j<r; j++)
+	{
+		if (a[j].score >= x)
+		{
+			struct student temp = a[i];
+			a[i] = a[j];
+			a[j] = temp;
+			i++;
+		}
+	}
+	struct student temp = a[i];
+	a[i] = a[r];
+	a[r] = temp;
+	return i;
+}
+
+void quickSort(struct student a[], int l, int r)
+{
+	if (l<r)
+	{
+		int p = qfindPivot(a, l, r);
+		quickSort(a, l, p - 1);
+		quickSort(a, p + 1, r);
+	}
+}
+
 void * scoresDescendingSort(struct student *students, int len) {
-	return NULL;
+	if (!students) return NULL;
+	quickSort(students, 0, len - 1);
 }

@@ -15,6 +15,61 @@ NOTES:
 
 #include <stdio.h>
 
-void * studentsCount(int *Arr, int len, int score, int *lessCount, int *moreCount) {
-	return NULL;
+int interpolationSearch(int array[], int size, int key) {
+	int guess = 0;
+	double t;
+	int minIndex = 0;
+	int maxIndex = size - 1;
+	while (array[guess] != key || (key>array[guess - 1] && key<array[guess]))
+	{
+		t = ((double)key - array[minIndex]) / ((double)array[maxIndex] - array[minIndex]);
+		guess = minIndex + t * (maxIndex - minIndex);
+		if (array[guess] < key)
+			minIndex = guess + 1;
+		if (array[guess] > key)
+			maxIndex = guess - 1;
+		if (array[minIndex] > key || array[maxIndex] < key)
+			return guess*size;
+	}
+	return guess;
+}
+
+void *studentsCount(int *Arr, int len, int score, int *lessCount, int *moreCount)
+{
+	if (Arr == NULL || len<0) return NULL;
+
+	if (Arr[0] == Arr[len - 1])
+	{
+		if (len>1 || (len == 1 && score == Arr[0]))
+		{
+			*lessCount = 0;
+			*moreCount = 0;
+		}
+		if (score > Arr[0])
+		{
+			*lessCount = 1;
+			*moreCount = 0;
+		}
+		if (score < Arr[0])
+		{
+			*lessCount = 0;
+			*moreCount = 1;
+		}
+	}
+	else
+	{
+		int k = interpolationSearch(Arr, len, score);
+		if (k < len)
+		{
+			*lessCount = k;
+			*moreCount = len - k - 1;
+		}
+		else
+		{
+			k = k / len;
+			*lessCount = k ;
+			*moreCount = len - k ;
+		}
+
+	}
 }
